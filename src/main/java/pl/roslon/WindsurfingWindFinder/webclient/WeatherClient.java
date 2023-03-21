@@ -3,7 +3,7 @@ package pl.roslon.WindsurfingWindFinder.webclient;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import pl.roslon.WindsurfingWindFinder.model.Geocode;
-import pl.roslon.WindsurfingWindFinder.model.Point;
+import pl.roslon.WindsurfingWindFinder.model.WindPoint;
 import pl.roslon.WindsurfingWindFinder.model.WindSpeed;
 import pl.roslon.WindsurfingWindFinder.webclient.dto.geocode.RootGeocodeDto;
 import pl.roslon.WindsurfingWindFinder.webclient.dto.wind.RootWindDto;
@@ -31,8 +31,9 @@ public class WeatherClient {
                 .build();
     }
 
-    public Point point(String cityName) {
-        return Point.builder()
+    public WindPoint buildPoint(String cityName) {
+        return WindPoint.builder()
+                .cityName(cityName)
                 .windSpeed(windSpeed(geocode(cityName).getLat(), geocode(cityName).getLon()).getWindSpeed())
                 .lat(geocode(cityName).getLat())
                 .lon(geocode(cityName).getLon())

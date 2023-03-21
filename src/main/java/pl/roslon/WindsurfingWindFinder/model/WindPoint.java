@@ -9,8 +9,9 @@ import java.util.ArrayList;
 @Getter
 @Builder
 @ToString
-public class Point {
+public class WindPoint {
 
+    private String cityName;
     private ArrayList<Double> windSpeed;
     private double lat;
     private double lon;

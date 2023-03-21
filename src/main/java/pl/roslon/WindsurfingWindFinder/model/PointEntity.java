@@ -32,12 +32,14 @@ public class PointEntity {
     private List<Double> windSpeed;
     private double lat;
     private double lon;
+    private String avgWindSpeed;
 
 
-    public PointEntity(String city, List<Double> windSpeed, double lat, double lon) {
+    public PointEntity(String city, List<Double> windSpeed, double lat, double lon, String avgWindSpeed) {
         this.city = city;
         this.windSpeed = windSpeed;
         this.lat = lat;
         this.lon = lon;
+        this.avgWindSpeed = avgWindSpeed;
     }
 }

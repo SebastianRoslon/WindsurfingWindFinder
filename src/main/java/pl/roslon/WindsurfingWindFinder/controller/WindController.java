@@ -38,7 +38,7 @@ public class WindController {
     @ResponseBody
     @GetMapping("/avg/{city}")
     public String avgWind(@PathVariable String city) {
-        return windService.calculateAverageWind(city);
+        return windService.calculateAverageWindSpeed(city);
     }
 
 

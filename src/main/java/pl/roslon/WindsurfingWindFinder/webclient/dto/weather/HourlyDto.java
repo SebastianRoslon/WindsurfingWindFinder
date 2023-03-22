@@ -1,17 +1,18 @@
-package pl.roslon.WindsurfingWindFinder.webclient.dto.geocode;
+package pl.roslon.WindsurfingWindFinder.webclient.dto.weather;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+
 @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class PositionDto {
+public class HourlyDto {
 
-    private double lat;
-    private double lon;
+    private double[] windspeed_10m;
+    private double[] temperature_2m;
 
 }

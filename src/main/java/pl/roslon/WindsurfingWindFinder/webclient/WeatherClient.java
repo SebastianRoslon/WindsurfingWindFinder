@@ -9,6 +9,7 @@ import pl.roslon.WindsurfingWindFinder.webclient.dto.weather.HourlyDto;
 import pl.roslon.WindsurfingWindFinder.webclient.dto.weather.RootTemperatureDto;
 
 import java.util.Arrays;
+import java.util.stream.DoubleStream;
 
 @Component
 public class WeatherClient {
@@ -36,18 +37,21 @@ public class WeatherClient {
     }
 
     public PointDto buildPoint(String cityName) {
+
+        double avgTempStream = Arrays.stream(weather(geocode(cityName).getLat(), geocode(cityName).getLon()).getTemperature_2m())
+                .average()
+                .getAsDouble();
+        String formattedAvgTemp = String.format("%.1f", avgTempStream);
+
+        double avgWindSpeed = Arrays.stream(weather(geocode(cityName).getLat(), geocode(cityName).getLon()).getWindspeed_10m())
+                .average()
+                .getAsDouble();
+        String formattedAvgWindSpeed = String.format("%.1f", avgWindSpeed);
+
         return PointDto.builder()
                 .city(cityName)
-                .avgTemp(Arrays.stream(weather(geocode(cityName).getLat(), geocode(cityName).getLon()).getTemperature_2m())
-                        .average()
-                        .getAsDouble())
-                .avgWindSpeed(Arrays.stream(weather(geocode(cityName).getLat(), geocode(cityName).getLon()).getWindspeed_10m())
-                        .average()
-                        .getAsDouble())
- //               .windSpeed(weather(geocode(cityName).getLat(), geocode(cityName).getLon()).getWindspeed_10m())
- //               .temperature(weather(geocode(cityName).getLat(), geocode(cityName).getLon()).getTemperature_2m())
-//                .lat(geocode(cityName).getLat())
-//                .lon(geocode(cityName).getLon())
+                .avgTemp(formattedAvgTemp)
+                .avgWindSpeed(formattedAvgWindSpeed)
                 .build();
     }
 

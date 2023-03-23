@@ -19,7 +19,7 @@ public class WindService {
 
     List<PointDto> pointDtoList = new ArrayList<>();
     public void addNewPointToList(){
-        pointDtoList.add(weatherClient.buildPoint("piaseczno"));
+        pointDtoList.add(weatherClient.buildPoint("zakopane"));
     }
 
     public String showPointsList(){

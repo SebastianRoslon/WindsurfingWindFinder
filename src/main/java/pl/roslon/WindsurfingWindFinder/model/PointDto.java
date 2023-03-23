@@ -30,11 +30,11 @@ public class PointDto {
 
     private String city;
    // @ElementCollection
-    private double[] windSpeed;
-    private double[] temperature;
-    private double lat;
-    private double lon;
-    private double avgWindSpeed;
-    private double avgTemp;
+  //  private double[] windSpeed;
+  //  private double[] temperature;
+ //   private double lat;
+ //   private double lon;
+    private String  avgWindSpeed;
+    private String avgTemp;
 
 }

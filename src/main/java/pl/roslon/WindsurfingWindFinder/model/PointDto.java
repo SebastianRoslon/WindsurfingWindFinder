@@ -13,8 +13,6 @@ import lombok.Setter;
 import lombok.ToString;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
 @Getter
 @Setter
 @AllArgsConstructor
@@ -22,19 +20,19 @@ import java.util.List;
 @Builder
 @ToString
 @Component
+@Entity
 public class PointDto {
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.AUTO)
-//    @Column(name = "id", nullable = false)
-//    private Long id;
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id", nullable = false)
+    private Long id;
     private String city;
    // @ElementCollection
   //  private double[] windSpeed;
   //  private double[] temperature;
- //   private double lat;
- //   private double lon;
-    private String  avgWindSpeed;
-    private String avgTemp;
+//    private double lat;
+//    private double lon;
+    private double avgWindSpeed;
+    private double avgTemp;
 
 }

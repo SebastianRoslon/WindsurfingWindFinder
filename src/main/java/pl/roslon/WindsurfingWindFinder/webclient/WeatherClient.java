@@ -8,15 +8,16 @@ import pl.roslon.WindsurfingWindFinder.webclient.dto.geocode.RootGeocodeDto;
 import pl.roslon.WindsurfingWindFinder.webclient.dto.weather.HourlyDto;
 import pl.roslon.WindsurfingWindFinder.webclient.dto.weather.RootTemperatureDto;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Arrays;
-import java.util.stream.DoubleStream;
 
 @Component
 public class WeatherClient {
 
     private final String GEOCODE_URL = "https://api.tomtom.com/search/2/geocode/";
     private final String API_KEY = "I8DPoFkgjahuvD6XKl2K9NdXHiSJjGWQ";
-    private final String METEO_URL = "https://api.open-meteo.com/v1/forecast?latitude=";
+    private final String METEO_URL = "https://api.open-meteo.com/v1/";
     private RestTemplate restTemplate = new RestTemplate();
 
 
@@ -28,8 +29,10 @@ public class WeatherClient {
                 .build();
     }
 
-    public HourlyDto weather(double lat, double lon) {
-        RootTemperatureDto rootTemperatureDto = callGetMethod(METEO_URL + "{lat}&longitude={lon}&hourly=temperature_2m,windspeed_10m&forecast_days=1&timezone=auto", RootTemperatureDto.class, lat, lon);
+    public HourlyDto weather(String cityName) {
+        double lat = geocode(cityName).getLat();
+        double lon = geocode(cityName).getLon();
+        RootTemperatureDto rootTemperatureDto = callGetMethod(METEO_URL + "forecast?latitude={lat}&longitude={lon}&hourly=temperature_2m,windspeed_10m&forecast_days=1&timezone=auto", RootTemperatureDto.class, lat, lon);
         return HourlyDto.builder()
                 .windspeed_10m(rootTemperatureDto.getHourly().getWindspeed_10m())
                 .temperature_2m(rootTemperatureDto.getHourly().getTemperature_2m())
@@ -37,22 +40,31 @@ public class WeatherClient {
     }
 
     public PointDto buildPoint(String cityName) {
-
-        double avgTempStream = Arrays.stream(weather(geocode(cityName).getLat(), geocode(cityName).getLon()).getTemperature_2m())
-                .average()
-                .getAsDouble();
-        String formattedAvgTemp = String.format("%.1f", avgTempStream);
-
-        double avgWindSpeed = Arrays.stream(weather(geocode(cityName).getLat(), geocode(cityName).getLon()).getWindspeed_10m())
-                .average()
-                .getAsDouble();
-        String formattedAvgWindSpeed = String.format("%.1f", avgWindSpeed);
-
         return PointDto.builder()
                 .city(cityName)
-                .avgTemp(formattedAvgTemp)
-                .avgWindSpeed(formattedAvgWindSpeed)
+                .avgTemp(getFormattedAvgTemp(cityName))
+                .avgWindSpeed(getFormattedAvgWindSpeed(cityName))
                 .build();
+    }
+
+    private double getFormattedAvgTemp(String cityName) {
+        double avgTempStream = Arrays.stream(weather(cityName).getTemperature_2m())
+                .average()
+                .getAsDouble();
+        return getFormattedNumber(avgTempStream);
+    }
+
+    private double getFormattedAvgWindSpeed(String cityName) {
+        double avgWindSpeed = Arrays.stream(weather(cityName).getWindspeed_10m())
+                .average()
+                .getAsDouble();
+        return getFormattedNumber(avgWindSpeed);
+    }
+
+    private double getFormattedNumber(double numberToFormat) {
+        BigDecimal bd = BigDecimal.valueOf(numberToFormat);
+        bd = bd.setScale(1, RoundingMode.HALF_UP);
+        return bd.doubleValue();
     }
 
     private <T> T callGetMethod(String url, Class<T> responseType, Object... objects) {

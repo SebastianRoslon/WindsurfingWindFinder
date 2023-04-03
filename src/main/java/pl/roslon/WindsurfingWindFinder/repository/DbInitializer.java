@@ -20,9 +20,9 @@ public class DbInitializer implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         windService.addPointToDb(weatherClient.buildPoint("Hel"));
-        Thread.sleep(1000);
+        Thread.sleep(500);
         windService.addPointToDb(weatherClient.buildPoint("Chalupy"));
-        Thread.sleep(1000);
-        windService.addPointToDb(weatherClient.buildPoint("Kadyny"));
+        Thread.sleep(500);
+        windService.addPointToDb(weatherClient.buildPoint("Kolobrzeg"));
     }
 }

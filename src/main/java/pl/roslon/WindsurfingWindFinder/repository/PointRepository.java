@@ -11,4 +11,6 @@ public interface PointRepository extends CrudRepository<PointDto, Long> {
 
     List<PointDto> findAllByOrderByAvgWindSpeedDesc();
 
+    long deleteByCity(String city);
+
 }

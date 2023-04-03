@@ -13,4 +13,6 @@ public interface PointRepository extends CrudRepository<PointDto, Long> {
 
     long deleteByCity(String city);
 
+    boolean existsByCity(String city);
+
 }

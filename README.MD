@@ -12,6 +12,11 @@ location city geocode and the other for the weather forecast.
 
 Application is using Java 14, Spring boot, Maven, H2, Lombok, JPA
 
+
+![Screenshot](https://user-images.githubusercontent.com/61514770/230174410-8b5fd6b9-2daa-4b06-8654-716f8dd59d23.png)
+
+![Screenshot](https://user-images.githubusercontent.com/61514770/230174434-32b30be8-5161-44bc-b7b0-312d7a7e6f85.png)
+
 ## Installation
 In the beggining of instalation you need to install java 14 and maven
 

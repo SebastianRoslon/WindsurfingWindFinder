@@ -35,4 +35,9 @@ public class PointDto {
     private double avgWindSpeed;
     private double avgTemp;
 
+    public PointDto(String city, double avgWindSpeed, double avgTemp) {
+        this.city = city;
+        this.avgWindSpeed = avgWindSpeed;
+        this.avgTemp = avgTemp;
+    }
 }

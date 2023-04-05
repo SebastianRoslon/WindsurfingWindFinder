@@ -16,7 +16,6 @@ public class DbInitializer implements CommandLineRunner {
         this.weatherClient = weatherClient;
     }
 
-
     @Override
     public void run(String... args) throws Exception {
         windService.addPointToDb(weatherClient.buildPoint("Hel"));

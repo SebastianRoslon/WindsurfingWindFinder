@@ -45,6 +45,7 @@ public class WeatherClient {
                 .avgTemp(getFormattedAvgTemp(cityName))
                 .avgWindSpeed(getFormattedAvgWindSpeed(cityName))
                 .build();
+
     }
 
     private double getFormattedAvgTemp(String cityName) {
@@ -70,6 +71,4 @@ public class WeatherClient {
     private <T> T callGetMethod(String url, Class<T> responseType, Object... objects) {
         return restTemplate.getForObject(url, responseType, objects);
     }
-
-
 }

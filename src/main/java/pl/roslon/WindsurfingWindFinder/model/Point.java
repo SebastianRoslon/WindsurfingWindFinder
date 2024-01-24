@@ -6,9 +6,10 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 @ToString
+@Getter
 public class Point {
 
-    private double[] windSpeed;
-    private double[] windTemp;
+    private double windSpeed;
+    private double windTemp;
 
 }

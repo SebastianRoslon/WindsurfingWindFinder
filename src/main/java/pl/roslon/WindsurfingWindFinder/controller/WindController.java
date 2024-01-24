@@ -16,7 +16,13 @@ public class WindController {
     @ResponseBody
     @GetMapping("/printList")
     private String printList(){
-       return windClient.createPointsList().toString();
+       return windClient.createPointsList();
+    }
+
+    @ResponseBody
+    @GetMapping("/printRepo")
+    private String printRepo(){
+        return windClient.printRepository();
     }
 
 }

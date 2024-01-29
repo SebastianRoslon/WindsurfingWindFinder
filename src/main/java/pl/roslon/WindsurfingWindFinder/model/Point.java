@@ -16,10 +16,12 @@ public class Point {
     @Column(name = "id", nullable = false)
     private Long id;
 
+    private String cityName;
     private double windSpeed;
     private double windTemp;
 
-    public Point(double windSpeed, double windTemp) {
+    public Point(String cityName, double windSpeed, double windTemp) {
+        this.cityName = cityName;
         this.windSpeed = windSpeed;
         this.windTemp = windTemp;
     }

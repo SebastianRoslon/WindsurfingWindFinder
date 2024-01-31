@@ -1,4 +1,4 @@
-package pl.roslon.WindsurfingWindFinder.dto;
+package pl.roslon.WindsurfingWindFinder.dto.weatherDto;
 
 import lombok.Getter;
 import lombok.ToString;

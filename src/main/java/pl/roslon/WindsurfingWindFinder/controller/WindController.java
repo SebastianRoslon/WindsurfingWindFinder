@@ -15,14 +15,20 @@ public class WindController {
 
     @ResponseBody
     @GetMapping("/printList")
-    private String printList(){
-       return windClient.createPointsList();
+    private String printList() {
+        return windClient.createDefaultPointsList();
     }
 
     @ResponseBody
     @GetMapping("/printRepo")
-    private String printRepo(){
+    private String printRepo() {
         return windClient.printRepository();
+    }
+
+    @ResponseBody
+    @GetMapping("/createGeo")
+    private String createGeocodePoint() {
+        return String.valueOf(windClient.createPointFromController());
     }
 
 }

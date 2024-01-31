@@ -18,7 +18,12 @@ public class WindClient {
     private PointRepository pointRepository;
     private final String METEO_URL = "https://api.open-meteo.com/v1/";
     private final String GEOCODE_URL = "https://geocoding-api.open-meteo.com/v1/";
-    private String cityName = "gdansk";
+    private String cityName;
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
+    }
+
     private double lat;
     private double lon;
 

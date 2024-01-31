@@ -2,6 +2,7 @@ package pl.roslon.WindsurfingWindFinder.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import pl.roslon.WindsurfingWindFinder.webclient.WindClient;
 
@@ -27,7 +28,8 @@ public class WindController {
 
     @ResponseBody
     @GetMapping("/createGeo")
-    private String createGeocodePoint() {
+    private String createGeocodePoint(@RequestParam String cityName) {
+        windClient.setCityName(cityName);
         return String.valueOf(windClient.createPointFromController());
     }
 

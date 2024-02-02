@@ -3,6 +3,7 @@ package pl.roslon.WindsurfingWindFinder.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import pl.roslon.WindsurfingWindFinder.repository.PointRepository;
@@ -22,15 +23,13 @@ public class WindController {
     @GetMapping("/index")
     private String printRepo(Model model) {
         model.addAttribute("pointsList", pointRepository.findAllByOrderByWindSpeedDesc());
-
         return "index.html";
     }
 
-    @ResponseBody
-    @GetMapping("/addNewPoint")
-    private String createGeocodePoint(@RequestParam String cityName) {
+    @PostMapping("/saveNewPoint")
+    private String addNewCity(@RequestParam String cityName){
         windClient.setCityName(cityName);
-        return String.valueOf(windClient.createPointFromController());
+        windClient.createPointFromController();
+        return "redirect:/index";
     }
-
 }

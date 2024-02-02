@@ -18,16 +18,10 @@ public class WindController {
         this.pointRepository = pointRepository;
     }
 
-    @ResponseBody
-    @GetMapping("/printList")
-    private String printList() {
-        return windClient.createDefaultPointsList();
-    }
-
-   // @ResponseBody
+    // @ResponseBody
     @GetMapping("/index")
     private String printRepo(Model model) {
-        model.addAttribute("pointsList", pointRepository.findAll());
+        model.addAttribute("pointsList", pointRepository.findAllByOrderByWindSpeedDesc());
 
         return "index.html";
     }

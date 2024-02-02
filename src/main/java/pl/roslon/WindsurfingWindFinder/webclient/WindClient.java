@@ -7,6 +7,7 @@ import pl.roslon.WindsurfingWindFinder.dto.weatherDto.RootWeatherDto;
 import pl.roslon.WindsurfingWindFinder.model.Point;
 import pl.roslon.WindsurfingWindFinder.repository.PointRepository;
 
+import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.stream.DoubleStream;
@@ -39,40 +40,32 @@ public class WindClient {
 
     public Point createPointFromController() {
         getLatLonFromCityName();
-        RootWeatherDto rootWeatherDto = callGetMethod(METEO_URL + "forecast?latitude={lat}&longitude={lon}&hourly=temperature_2m,wind_speed_10m", RootWeatherDto.class, lat, lon);
+        RootWeatherDto rootWeatherDto = callGetMethod(METEO_URL + "forecast?latitude={lat}&longitude={lon}&hourly=temperature_2m,wind_speed_10m&forecast_days=1", RootWeatherDto.class, lat, lon);
 
         return pointRepository.save(Point.builder()
                 .cityName(cityName)
-                .windSpeed(rootWeatherDto.getHourly().getWind_speed_10m()[0])
-                .windTemp(rootWeatherDto.getHourly().getTemperature_2m()[0])
+                .windSpeed(numberFormatter(DoubleStream.of(rootWeatherDto.getHourly().getWind_speed_10m())))
+                .windTemp(numberFormatter(DoubleStream.of(rootWeatherDto.getHourly().getTemperature_2m())))
                 .build());
     }
 
 
-    public String createDefaultPointsList() {
+    public void createDefaultPointsList() {
         String[] cities = {"Swinoujscie", "Pobierowo", "Kolobrzeg", "Ustka", "Leba", "Debki", "Chalupy", "Jastarnia", "Hel", "Sopot", "Krynica Morska", "Kadyny"};
-        RootWeatherDto[] rootWeatherDto = callGetMethod(METEO_URL + "forecast?latitude=53.9105,54.061,54.1756,54.5805,54.761,54.8299,54.7592,54.6983,54.6038,54.4418,54.3805,54.2989&longitude=14.2471,14.9328,15.5834,16.8619,17.5555,18.0881,18.5089,18.6773,18.8035,18.56,19.4441,19.4856&hourly=temperature_2m,wind_speed_10m", RootWeatherDto[].class);
+        RootWeatherDto[] rootWeatherDto = callGetMethod(METEO_URL + "forecast?latitude=53.9105,54.061,54.1756,54.5805,54.761,54.8299,54.7592,54.6983,54.6038,54.4418,54.3805,54.2989&longitude=14.2471,14.9328,15.5834,16.8619,17.5555,18.0881,18.5089,18.6773,18.8035,18.56,19.4441,19.4856&hourly=temperature_2m,wind_speed_10m&forecast_days=1", RootWeatherDto[].class);
         Point[] points = new Point[rootWeatherDto.length];
 
         for (int i = 0; i < rootWeatherDto.length; i++) {
-            points[i] = new Point(cities[i], numberFormatter(Arrays.stream(rootWeatherDto[i].getHourly().getWind_speed_10m())),
-                    numberFormatter(Arrays.stream(rootWeatherDto[i].getHourly().getTemperature_2m())));
+            points[i] = new Point(cities[i], numberFormatter(DoubleStream.of(rootWeatherDto[i].getHourly().getWind_speed_10m())),
+                   numberFormatter(DoubleStream.of(rootWeatherDto[i].getHourly().getTemperature_2m())));
             pointRepository.save(points[i]);
         }
-
-        Arrays.sort(points, Comparator.comparing(Point::getWindSpeed).reversed());
-        return Arrays.toString(points);
     }
 
     private double numberFormatter(DoubleStream doubleStream) {
         double avgNumber = doubleStream.average().orElse(0.0);
-        return (double) Math.round(avgNumber);
+        return Math.floor(avgNumber * 100) / 100;
     }
-
-//    public Iterable<Point> printRepository() {
-//        return pointRepository.findAll();
-//    }
-
     private <T> T callGetMethod(String url, Class<T> responseType, Object... objects) {
         return restTemplate.getForObject(url, responseType, objects);
     }

@@ -18,14 +18,14 @@ public class WindClient {
     private PointRepository pointRepository;
     private final String METEO_URL = "https://api.open-meteo.com/v1/";
     private final String GEOCODE_URL = "https://geocoding-api.open-meteo.com/v1/";
+
     private String cityName;
+    private double lat;
+    private double lon;
 
     public void setCityName(String cityName) {
         this.cityName = cityName;
     }
-
-    private double lat;
-    private double lon;
 
     public WindClient(PointRepository pointRepository) {
         this.pointRepository = pointRepository;
@@ -40,12 +40,12 @@ public class WindClient {
     public Point createPointFromController() {
         getLatLonFromCityName();
         RootWeatherDto rootWeatherDto = callGetMethod(METEO_URL + "forecast?latitude={lat}&longitude={lon}&hourly=temperature_2m,wind_speed_10m", RootWeatherDto.class, lat, lon);
-        return Point.builder()
+
+        return pointRepository.save(Point.builder()
                 .cityName(cityName)
                 .windSpeed(rootWeatherDto.getHourly().getWind_speed_10m()[0])
                 .windTemp(rootWeatherDto.getHourly().getTemperature_2m()[0])
-                .build();
-
+                .build());
     }
 
 
@@ -69,9 +69,9 @@ public class WindClient {
         return (double) Math.round(avgNumber);
     }
 
-    public String printRepository() {
-        return pointRepository.findAll().toString();
-    }
+//    public Iterable<Point> printRepository() {
+//        return pointRepository.findAll();
+//    }
 
     private <T> T callGetMethod(String url, Class<T> responseType, Object... objects) {
         return restTemplate.getForObject(url, responseType, objects);

@@ -7,10 +7,7 @@ import pl.roslon.WindsurfingWindFinder.dto.weatherDto.RootWeatherDto;
 import pl.roslon.WindsurfingWindFinder.model.Point;
 import pl.roslon.WindsurfingWindFinder.repository.PointRepository;
 
-import java.text.DecimalFormat;
 import java.util.Arrays;
-import java.util.Comparator;
-import java.util.stream.DoubleStream;
 
 @Component
 public class WindClient {
@@ -44,8 +41,8 @@ public class WindClient {
 
         return pointRepository.save(Point.builder()
                 .cityName(cityName)
-                .windSpeed(numberFormatter(DoubleStream.of(rootWeatherDto.getHourly().getWind_speed_10m())))
-                .windTemp(numberFormatter(DoubleStream.of(rootWeatherDto.getHourly().getTemperature_2m())))
+                .windSpeed(valueFormatter(rootWeatherDto.getHourly().getWind_speed_10m()))
+                .windTemp(valueFormatter(rootWeatherDto.getHourly().getTemperature_2m()))
                 .build());
     }
 
@@ -56,16 +53,17 @@ public class WindClient {
         Point[] points = new Point[rootWeatherDto.length];
 
         for (int i = 0; i < rootWeatherDto.length; i++) {
-            points[i] = new Point(cities[i], numberFormatter(DoubleStream.of(rootWeatherDto[i].getHourly().getWind_speed_10m())),
-                   numberFormatter(DoubleStream.of(rootWeatherDto[i].getHourly().getTemperature_2m())));
+            points[i] = new Point(cities[i], valueFormatter((rootWeatherDto[i].getHourly().getWind_speed_10m())),
+                    valueFormatter(rootWeatherDto[i].getHourly().getTemperature_2m()));
             pointRepository.save(points[i]);
         }
     }
 
-    private double numberFormatter(DoubleStream doubleStream) {
-        double avgNumber = doubleStream.average().orElse(0.0);
-        return Math.floor(avgNumber * 100) / 100;
+    private double valueFormatter(double[] doubles) {
+        double d = Arrays.stream(doubles).average().orElse(0.0);
+        return Math.floor(d * 100) / 100;
     }
+
     private <T> T callGetMethod(String url, Class<T> responseType, Object... objects) {
         return restTemplate.getForObject(url, responseType, objects);
     }

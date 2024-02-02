@@ -20,10 +20,11 @@
     </tr>
     <tr th:each="point : ${pointsList}">
         <td><span th:text="${point.cityName}"> city </span></td>
-        <td><span th:text="${point.windSpeed}"> wind speed </span></td>
-        <td><span th:text="${point.windTemp}"> wind temp </span></td>
+        <td align="center"><span th:text="${point.windSpeed}"> wind speed </span></td>
+        <td align="center"><span th:text="${point.windTemp}"> wind temp </span></td>
     </tr>
     </tbody>
+
 
 
 

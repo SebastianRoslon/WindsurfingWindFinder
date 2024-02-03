@@ -35,17 +35,18 @@ public class WindClient {
         lon = rootGeocodeDto.getResults()[0].getLongitude();
     }
 
-    public Point createPointFromController() {
+    public void createPointFromController() {
         getLatLonFromCityName();
         RootWeatherDto rootWeatherDto = callGetMethod(METEO_URL + "forecast?latitude={lat}&longitude={lon}&hourly=temperature_2m,wind_speed_10m&forecast_days=1", RootWeatherDto.class, lat, lon);
 
-        return pointRepository.save(Point.builder()
-                .cityName(cityName)
-                .windSpeed(valueFormatter(rootWeatherDto.getHourly().getWind_speed_10m()))
-                .windTemp(valueFormatter(rootWeatherDto.getHourly().getTemperature_2m()))
-                .build());
-    }
+        Point p = new Point(cityName,
+                valueFormatter(rootWeatherDto.getHourly().getWind_speed_10m()),
+                valueFormatter(rootWeatherDto.getHourly().getTemperature_2m()));
 
+        if (pointRepository.findByCityNameIgnoreCase(p.getCityName()) == null) {
+            pointRepository.save(p);
+        }
+    }
 
     public void createDefaultPointsList() {
         String[] cities = {"Swinoujscie", "Pobierowo", "Kolobrzeg", "Ustka", "Leba", "Debki", "Chalupy", "Jastarnia", "Hel", "Sopot", "Krynica Morska", "Kadyny"};

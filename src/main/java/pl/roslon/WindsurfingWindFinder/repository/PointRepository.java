@@ -10,8 +10,6 @@ import java.util.List;
 
 public interface PointRepository extends CrudRepository<Point, Long> {
     @Transactional
-    @Modifying
-    @Query("delete from Point p where upper(p.cityName) like upper(concat('%', ?1, '%'))")
     int deleteByCityNameContainsIgnoreCase(String cityName);
     long deleteByCityName(String cityName);
 

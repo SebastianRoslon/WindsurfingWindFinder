@@ -28,8 +28,14 @@
 <br>
 <br>
 <form action="/saveNewPoint" method="post">
-    <label for="cityName">Enter city:</label>
+    <label for="cityName">Add new city:</label>
     <input type="text" id="cityName" name="cityName"/>
+    <button type="submit">Submit</button>
+</form>
+<br>
+<form action="/deletePoint" method="post">
+    <label for="cityDoDelete">City to delete:</label>
+    <input type="text" id="cityDoDelete" name="cityToDelete"/>
     <button type="submit">Submit</button>
 </form>
 

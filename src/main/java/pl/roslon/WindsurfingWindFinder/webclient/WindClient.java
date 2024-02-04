@@ -21,21 +21,16 @@ public class WindClient {
     private double lat;
     private double lon;
 
-    public void setCityName(String cityName) {
+    public String setCityName(String cityName) {
         this.cityName = cityName;
+        return cityName;
     }
 
     public WindClient(PointRepository pointRepository) {
         this.pointRepository = pointRepository;
     }
 
-    public void getLatLonFromCityName() {
-        RootGeocodeDto rootGeocodeDto = callGetMethod(GEOCODE_URL + "search?name={cityName}&count=1&language=en&format=json", RootGeocodeDto.class, cityName);
-        lat = rootGeocodeDto.getResults()[0].getLatitude();
-        lon = rootGeocodeDto.getResults()[0].getLongitude();
-    }
-
-    public void createPointFromController() {
+    public void createPointFromCityName() {
         getLatLonFromCityName();
         RootWeatherDto rootWeatherDto = callGetMethod(METEO_URL + "forecast?latitude={lat}&longitude={lon}&hourly=temperature_2m,wind_speed_10m&forecast_days=1", RootWeatherDto.class, lat, lon);
 
@@ -48,15 +43,22 @@ public class WindClient {
         }
     }
 
-    public void createDefaultPointsList() {
-        String[] cities = {"Swinoujscie", "Pobierowo", "Kolobrzeg", "Ustka", "Leba", "Debki", "Chalupy", "Jastarnia", "Hel", "Sopot", "Krynica Morska", "Kadyny"};
-        RootWeatherDto[] rootWeatherDto = callGetMethod(METEO_URL + "forecast?latitude=53.9105,54.061,54.1756,54.5805,54.761,54.8299,54.7592,54.6983,54.6038,54.4418,54.3805,54.2989&longitude=14.2471,14.9328,15.5834,16.8619,17.5555,18.0881,18.5089,18.6773,18.8035,18.56,19.4441,19.4856&hourly=temperature_2m,wind_speed_10m&forecast_days=1", RootWeatherDto[].class);
-        Point[] points = new Point[rootWeatherDto.length];
+    private void getLatLonFromCityName() {
+        RootGeocodeDto rootGeocodeDto = callGetMethod(GEOCODE_URL + "search?name={cityName}&count=1&language=en&format=json", RootGeocodeDto.class, cityName);
+       try {
+           lat = rootGeocodeDto.getResults()[0].getLatitude();
+           lon = rootGeocodeDto.getResults()[0].getLongitude();
+       }catch (NullPointerException e){
+           e.printStackTrace();
+       }
+    }
 
-        for (int i = 0; i < rootWeatherDto.length; i++) {
-            points[i] = new Point(cities[i], valueFormatter((rootWeatherDto[i].getHourly().getWind_speed_10m())),
-                    valueFormatter(rootWeatherDto[i].getHourly().getTemperature_2m()));
-            pointRepository.save(points[i]);
+    public void createDefaultPointsList() throws InterruptedException {
+        String[] defaultCities = {"Pobierowo", "Ustka", "Łeba", "Dębki", "Chałupy", "Jastarnia", "Hel", "Sopot", "Krynica Morska", "Kadyny"};
+
+        for (int i = 0; i < defaultCities.length; i++) {
+            defaultCities[i] = setCityName(defaultCities[i]);
+            createPointFromCityName();
         }
     }
 

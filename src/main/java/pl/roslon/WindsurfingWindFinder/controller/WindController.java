@@ -25,35 +25,13 @@ public class WindController {
     @PostMapping("/saveNewPoint")
     private String addNewCity(@RequestParam String cityName){
         windClient.setCityName(cityName);
-        windClient.createPointFromController();
+        windClient.createPointFromCityName();
         return "redirect:/index";
     }
 
-
-    @PostMapping("/saveMultiplePoints")
-    private String addMultipleCities(){
-        windClient.setCityName("bobrowiec");
-        windClient.createPointFromController();
-
-        windClient.setCityName("piaseczno");
-        windClient.createPointFromController();
-
-        windClient.setCityName("warsaw");
-        windClient.createPointFromController();
-
-        windClient.setCityName("golkow");
-        windClient.createPointFromController();
-
-        windClient.setCityName("zabieniec");
-        windClient.createPointFromController();
+    @PostMapping("/deletePoint")
+    private String deleteCity(@RequestParam String cityToDelete){
+        pointRepository.deleteByCityNameContainsIgnoreCase(cityToDelete);
         return "redirect:/index";
     }
-
-    @ResponseBody
-    @PostMapping("/delete")
-    private String deleteCity(@RequestParam String cityName){
-        pointRepository.deleteByCityNameContainsIgnoreCase(cityName);
-        return "ok";
-    }
-
 }

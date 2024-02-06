@@ -23,9 +23,6 @@ Application is using Java 17, Spring boot, Maven, H2 database, Lombok, JPA
 
 Endpoint for retrieving and displaying a list of points in the application.
 
-**Parameters:**
-- None
-
 **Returned Data:**
 - HTML view "index.html" with a list of points sorted in descending order by wind speed.
 

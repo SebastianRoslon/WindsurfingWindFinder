@@ -3,8 +3,11 @@ package pl.roslon.WindsurfingWindFinder.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import pl.roslon.WindsurfingWindFinder.model.Point;
 import pl.roslon.WindsurfingWindFinder.repository.PointRepository;
 import pl.roslon.WindsurfingWindFinder.webclient.WindClient;
+
+import java.util.List;
 
 @Controller
 public class WindController {
@@ -16,6 +19,7 @@ public class WindController {
         this.pointRepository = pointRepository;
     }
 
+
     @GetMapping("/index")
     private String printRepo(Model model) {
         model.addAttribute("pointsList", pointRepository.findAllByOrderByWindSpeedDesc());
@@ -23,14 +27,14 @@ public class WindController {
     }
 
     @PostMapping("/saveNewPoint")
-    private String addNewCity(@RequestParam String cityName){
+    private String addNewCity(@RequestParam String cityName) {
         windClient.setCityName(cityName);
         windClient.createPointFromCityName();
         return "redirect:/index";
     }
 
     @PostMapping("/deletePoint")
-    private String deleteCity(@RequestParam String cityToDelete){
+    private String deleteCity(@RequestParam String cityToDelete) {
         pointRepository.deleteByCityNameContainsIgnoreCase(cityToDelete);
         return "redirect:/index";
     }

@@ -30,6 +30,15 @@ public class WindClient {
         this.pointRepository = pointRepository;
     }
 
+    public void createDefaultPointsList() {
+        String[] defaultCities = {"Pobierowo", "Ustka", "Łeba", "Dębki", "Chałupy", "Jastarnia", "Krynica Morska", "Kadyny", "Gdańsk"};
+
+        for (int i = 0; i < defaultCities.length; i++) {
+            defaultCities[i] = setCityName(defaultCities[i]);
+            createPointFromCityName();
+        }
+    }
+
     public void createPointFromCityName() {
         getLatLonFromCityName();
         RootWeatherDto rootWeatherDto = callGetMethod(METEO_URL + "forecast?latitude={lat}&longitude={lon}&hourly=temperature_2m,wind_speed_10m&forecast_days=1", RootWeatherDto.class, lat, lon);
@@ -51,15 +60,6 @@ public class WindClient {
        }catch (NullPointerException e){
            e.printStackTrace();
        }
-    }
-
-    public void createDefaultPointsList() throws InterruptedException {
-        String[] defaultCities = {"Pobierowo", "Ustka", "Łeba", "Dębki", "Chałupy", "Jastarnia", "Hel", "Sopot", "Krynica Morska", "Kadyny"};
-
-        for (int i = 0; i < defaultCities.length; i++) {
-            defaultCities[i] = setCityName(defaultCities[i]);
-            createPointFromCityName();
-        }
     }
 
     private double valueFormatter(double[] doubles) {

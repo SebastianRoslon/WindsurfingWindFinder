@@ -13,6 +13,8 @@ forecast based on that geocode.
 
 Application is using Java 17, Spring boot, Maven, H2 database, Lombok, JPA
 
+![Screenshot](https://raw.githubusercontent.com/SebastianRoslon/WindsurfingWindFinderV2/master/wind.png?token=GHSAT0AAAAAACMXKCHNNXDH5EBNHCDCI4VUZOCJYRA)
+
 ## Endpoints
 
 ### 1. Fetching Data
